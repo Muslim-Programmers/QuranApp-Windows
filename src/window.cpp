@@ -2,6 +2,7 @@
 #include <string>
 #include <QFile>
 #include <QTextStream>
+#include <QtFontDatabaseSupport/QtFontDatabaseSupport>
 #include "window.hpp"
 #include "json/json.hpp"
 
@@ -62,6 +63,8 @@ Window::Window()
     connect(play, SIGNAL(clicked()), this, SLOT(set_play()));
     connect(pause, SIGNAL(clicked()), this, SLOT(set_pause()));
     connect(stop, SIGNAL(clicked()), this, SLOT(set_stop()));
+    connect(&Mediaplayer, &QMediaPlayer::durationChanged, this, &Window::updateDuration);
+    connect(&Mediaplayer, &QMediaPlayer::positionChanged, this, &Window::updatePosition);
 }
 
 void Window::createMenu()
@@ -136,11 +139,16 @@ QGroupBox *Window::createPlayerUi()
     play = new QPushButton("Play");
     pause = new QPushButton("Pause");
     stop = new QPushButton("Stop");
-    player = new QMediaPlayer;
-    player->setMedia(QuranUrl);
+    positionSlider = new QSlider(Qt::Horizontal);
+    positionLabel = new QLabel(tr("00:00"));
+    positionLabel->setMinimumWidth(positionLabel->sizeHint().width());
+    positionSlider->setEnabled(false);
+    Mediaplayer.setMedia(QuranUrl);
     PlayerLayout->addWidget(play);
     PlayerLayout->addWidget(pause);
     PlayerLayout->addWidget(stop);
+    PlayerLayout->addWidget(positionSlider);
+    PlayerLayout->addWidget(positionLabel);
     PlayerBox->setLayout(PlayerLayout);
     return PlayerBox;
 
@@ -178,6 +186,9 @@ void Window::getSurah(std::string surah_name, std::string edition)
     QDBReader Database;
     std::vector<std::string> data;
     std::vector<std::string> meta = Database.metadata();
+    int id = QFontDatabase::addApplicationFont("resources/Harmattan-Regular.ttf");
+    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
+    QFont arabic(family);
     show_surah->setText(QString::fromStdString(meta.at(surah_number)) + "\n");
     QTextCursor cursor = show_surah->textCursor();
     QTextBlockFormat textBlockFormat = cursor.blockFormat();
@@ -187,7 +198,8 @@ void Window::getSurah(std::string surah_name, std::string edition)
     for(auto str : data)
         show_surah->append(QString::fromStdString(str) + "\n");
     show_surah->selectAll();
-    show_surah->setFontPointSize(16); // set Font Size
+    show_surah->setFont(arabic);
+    show_surah->setFontPointSize(22); // set Font Size
     show_surah->setTextCursor(cursor);
     show_surah->setReadOnly(true);    // set Text Box Read Only
 }
@@ -220,8 +232,8 @@ void Window::showSurah()
     getSurah(data.at(surah_number), "quran");
     getTranslation(data.at(surah_number), translation->currentText().toStdString());
     QuranUrl = getQuranUrl(surah->currentIndex()+1);
-    player->stop();
-    player->setMedia(QuranUrl);
+    Mediaplayer.stop();
+    Mediaplayer.setMedia(QuranUrl);
 }
 
 void Window::showTranslation()
@@ -250,7 +262,7 @@ void Window::showAbout()
     QLabel *Instagram = new QLabel("Instagram : @muslimpgmrs");
     QLabel *Contributers = new QLabel("Contributers : Nashid , Jonas");
     QLabel *footer = new QLabel("https://www.muslimprogrammers.com");
-    QLabel *version = new QLabel("Version 1.4 beta");
+    QLabel *version = new QLabel("Version 1.4 stable");
     icon->setPixmap(pixmap);
     icon->setAlignment(Qt::AlignCenter);
     icon->setGeometry(QRect(312, 454, 21, 20));
@@ -433,8 +445,9 @@ void Window::set_play()
 {
     if(!quran_is_playing || quran_is_paused)
     {
-        player->play();
+        Mediaplayer.play();
         quran_is_playing = true;
+        positionSlider->setEnabled(true);
     }
 }
 
@@ -442,7 +455,7 @@ void Window::set_pause()
 {
     if(quran_is_playing)
     {
-        player->pause();
+        Mediaplayer.pause();
         quran_is_paused = true;
         quran_is_playing = false;
     }
@@ -452,8 +465,32 @@ void Window::set_stop()
 {
     if(quran_is_playing || quran_is_paused)
     {
-        player->stop();
+        Mediaplayer.stop();
         quran_is_playing = false;
         quran_is_paused = false;
+        positionSlider->setEnabled(false);
     }
+}
+
+static QString formatTime(qint64 timeMilliSeconds)
+{
+    qint64 seconds = timeMilliSeconds / 1000;
+    const qint64 minutes = seconds / 60;
+    seconds -= minutes * 60;
+    return QStringLiteral("%1:%2")
+        .arg(minutes, 2, 10, QLatin1Char('0'))
+        .arg(seconds, 2, 10, QLatin1Char('0'));
+}
+
+void Window::updateDuration(qint64 duration)
+{
+    positionSlider->setRange(0, duration);
+    positionSlider->setEnabled(duration > 0);
+    positionSlider->setPageStep(duration / 10);
+}
+
+void Window::updatePosition(qint64 position)
+{
+    positionSlider->setValue(position);
+    positionLabel->setText(formatTime(position));
 }
