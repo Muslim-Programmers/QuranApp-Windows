@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(Quran-app VERSION 2.0 LANGUAGES CXX)
+project(Quran-app VERSION 1.5 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
-set(CMAKE_PREFIX_PATH "C:\\Qt\\5.15.2\\msvc2019_64;C:\\vcpkg\\installed\\x64-windows")
+set(CMAKE_PREFIX_PATH "C:\\Qt\\5.15.2\\msvc2019_64;C:\\Users\\Nasi\\vcpkg\\installed\\x64-windows")
 set(APP_ICON "src/icon.rc")
 
 set(SRCS
@@ -18,7 +18,7 @@ set(SRCS
     src/db_reader.hpp
     src/curl_parser.hpp
     src/db_reader.cpp
-    qdarkstyle/style.qrc
+    src/winDark.cpp
 )
 
 if(CMAKE_VERSION VERSION_LESS "3.7.0")

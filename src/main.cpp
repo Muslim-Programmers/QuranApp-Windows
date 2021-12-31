@@ -11,6 +11,7 @@
 #include <QSplashScreen>
 #include <QTimer>
 #include "window.hpp"
+#include "winDark.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -18,6 +19,8 @@ int main(int argc, char *argv[])
     QApplication qapp(argc, argv);
     qapp.setWindowIcon(QIcon("resources/icon.png"));
     Window *window;                                         // Main Window
+    if(winDark::isDarkTheme())
+        winDark::setDark_qApp();
     QPixmap pixmap("resources/qapp-splash.jpg");            // Image to show in Splash Screen
     QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint); // Splash Screen object    
     window = new Window;
