@@ -1,4 +1,4 @@
-# Quran-application
+# QuranApp
 
 بِسْمِ ٱللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ ,
 السَّلاَمُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ
@@ -26,4 +26,4 @@ You can either use VS Code or Qt Creator to Build this program
 * make a directory called `build` , and cd to `build`
 * change the `CMAKE_PREFIX_PATH` in CMakeLists.txt according to your configuration
 * run `cmake ..` , then `make`
-* after build please add `resources`, `qdarkstyle` and `database` directory to the build folder
+* after build please add `resources` and `database` directory to the build folder
