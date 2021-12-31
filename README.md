@@ -9,6 +9,10 @@ Linux Version : [QuranApp-Linux](https://github.com/Muslim-Programmers/QuranApp-
 
 This Project uses [nlohmann json](https://github.com/nlohmann/json) for json parsing .
 
+![Screenshot 2021-12-31 101436](https://user-images.githubusercontent.com/95064572/147803856-a64a2fd8-51ac-47d0-ab30-6d187070b7cb.png)
+
+![Screenshot 2021-12-31 101500](https://user-images.githubusercontent.com/95064572/147803860-60d600ef-2521-43c9-8d6d-a646c18a22d0.png)
+
 # Build Tools
 * Visual Studio 2017/2019
 * CMake
