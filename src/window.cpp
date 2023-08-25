@@ -230,7 +230,7 @@ void Window::getSurah(std::string surah_name, std::string edition, QTextEdit* te
     QDBReader Database;
     std::vector<std::string> data;
     std::vector<std::string> meta = Database.metadata();
-    int id = QFontDatabase::addApplicationFont("resources/Harmattan-Regular.ttf");
+    int id = QFontDatabase::addApplicationFont("resources/Amiri-Regular.ttf");
     QString family = QFontDatabase::applicationFontFamilies(id).at(0);
     QFont arabic(family);
     textbox->setText(QString::fromStdString(meta.at(surah_number)));
