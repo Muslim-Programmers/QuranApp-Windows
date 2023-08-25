@@ -19,9 +19,13 @@ This Project uses [nlohmann json](https://github.com/nlohmann/json) for json par
 
 # Dependencies
 To install dependencies , use vcpkg : https://github.com/microsoft/vcpkg
-* libcurl : `vcpkg.exe install curl:x64-windows sqlite3:x64-windows`
+* `vcpkg.exe install curl:x64-windows sqlite3:x64-windows`
+
+* Install [Visual C++ Redistributable AIO](https://github.com/abbodi1406/vcredist)
 
 # Compiling Instruction
 You can either use VS Code or Qt Creator to Build this program
 
-* after build please add `resources` and `database` directory to the build folder
+* after build, please add `resources` and `database` directory to the build folder.
+
+*  also copy `libcurl.dll`, `sqlite3.dll` and `zlib1.dll` from `vcpkg\installed\x64-windows\bin` directory to build folder.
